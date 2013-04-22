@@ -1,7 +1,7 @@
 cape-cod
 ========
 
-cape-cod makes it easy for you to append ANSI es<strong>CAPE-COD<strong>es - HAR! bet you didn't see
+cape-cod makes it easy for you to append ANSI es<strong>CAPE-COD</strong>es - HAR! bet you didn't see
 that coming; I know, I know, I'm a genius - to you strings.
 
 ### *Hey, but don't we have a plenty of gems that do exactly the same thing?*
