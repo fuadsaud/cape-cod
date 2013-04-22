@@ -1,12 +1,14 @@
 cape-cod
 ========
 
-cape-cod makes it easy for you to append ANSI es**CAPE-COD**es - HAR! bet you didn't see
+cape-cod makes it easy for you to append ANSI es<strong>CAPE-COD<strong>es - HAR! bet you didn't see
 that coming; I know, I know, I'm a genius - to you strings.
 
-## *Hey, but don't we have a plenty of gems that does exactly the same thing?*
+### *Hey, but don't we have a plenty of gems that do exactly the same thing?*
 
-**YES**. We can cite defunkt/colored, fazibear/colorize, flori/term-ansicolor, and so on...
+**YES**. We can cite [colored](http://github.com/defunkt/colored) - by @defunkt -,
+[colorize](http://github.com/fazibear/colorize) - by @fazibear -,
+[term-ansicolor](http://github.com/flori/term-ansicolor), and so on...
 They are really nice gems, and they solve the escape code problem in different manners
 but they're all abandoned, some accumulating 3 years old issues.
 
