@@ -38,7 +38,7 @@ module CapeCod
     on_magenta:    45,
     on_cyan:       46,
     on_white:      47,
-    }.freeze
+  }.freeze
 
   #
   # Define helper methods for applying the escape codes

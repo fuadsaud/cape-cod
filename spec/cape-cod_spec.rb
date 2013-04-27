@@ -37,7 +37,7 @@ describe CapeCod do
   context 'when using instance methods' do
     before { class String; include CapeCod end }
 
-    let(:string) { 'foo bar baz'}
+    let(:string) { 'foo bar baz' }
 
     it 'returns a new string with the proper escape codes applied' do
 
