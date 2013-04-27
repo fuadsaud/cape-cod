@@ -8,7 +8,7 @@ describe CapeCod do
   end
 
   it 'should generate proper escape sequences' do
-    expect(CapeCod.escape_sequence_for(:reset)).to eq("\e[0m")
+    expect(CapeCod.reset).to eq("\e[0m")
   end
 
   it 'should have methods for all defined escape codes' do
@@ -17,5 +17,10 @@ describe CapeCod do
     CapeCod::ESCAPE_CODES.each do |method, _|
       expect(methods).to include(method)
     end
+  end
+
+  it %(should prepend the color code and append reset when string
+       is given as param).squeeze(' ') do
+    expect(CapeCod.red('some text')).to eq("\e[31msome text\e[0m")
   end
 end

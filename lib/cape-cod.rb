@@ -41,16 +41,20 @@ module CapeCod
   }.freeze
 
   ESCAPE_CODES.each do |code, _|
-    define_method code do |string = self.to_s|
-      return CapeCod.apply_escape_sequence(code, string)
+    define_method code do
+      CapeCod.apply_escape_sequence(code, self)
+    end
+
+    define_singleton_method code do |string|
+       CapeCod.apply_escape_sequence(code, string.to_s)
     end
   end
+
+  private
 
   def self.escape_sequence_for(code)
     "\e[#{ESCAPE_CODES.fetch(code)}m"
   end
-
-  private
 
   def self.apply_escape_sequence(code, string)
     sequence = escape_sequence_for(code)
