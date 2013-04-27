@@ -40,22 +40,32 @@ module CapeCod
     on_white:      47,
   }.freeze
 
+  #
+  # Define helper methods for applying the escape codes
+  #
   ESCAPE_CODES.each do |code, _|
     define_method code do
       CapeCod.apply_escape_sequence(code, self)
     end
 
     define_singleton_method code do |string|
-       CapeCod.apply_escape_sequence(code, string.to_s)
+       CapeCod.apply_escape_sequence(code, string)
     end
   end
 
   private
 
+  #
+  # Returns the ANSI escape sequence for a given escape code.
+  #
   def self.escape_sequence_for(code)
     "\e[#{ESCAPE_CODES.fetch(code)}m"
   end
 
+  #
+  # Prepends the given +string+ with the ANSI escape sequence for the given
+  # escape +code+ and append a reset sequence.
+  #
   def self.apply_escape_sequence(code, string)
     sequence = escape_sequence_for(code)
 
