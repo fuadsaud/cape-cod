@@ -33,20 +33,35 @@ describe CapeCod do
   context 'when using instance methods' do
     before { class String; include CapeCod end }
 
-    let(:string) { 'foo bar baz' }
+    let(:string)    { 'foo bar baz' }
+    let(:bold)      { "\e[1m#{string}\e[0m" }
+    let(:red)       { "\e[31m#{string}\e[0m" }
+    let(:on_yellow) { "\e[43m#{string}\e[0m" }
+    let(:r_on_y)    { "\e[43m\e[31mfoo bar baz\e[0m\e[0m" }
+    let(:r_on_y_b)  { "\e[1m\e[43m\e[31mfoo bar baz\e[0m\e[0m\e[0m" }
+
 
     it 'returns a new string with the proper escape codes applied' do
 
-      expect(string.red).to_not eql(string)
+      expect(string.bold).to_not eql(string)
 
-      expect(string.red).to    eql("\e[31mfoo bar baz\e[0m")
-      expect(string.on_red).to eql("\e[41mfoo bar baz\e[0m")
-      expect(string.bold).to   eql("\e[1mfoo bar baz\e[0m")
 
-      expect(string.red.on_yellow).to \
-                                    eql("\e[43m\e[31mfoo bar baz\e[0m\e[0m")
-      expect(string.red.on_yellow.bold).to \
-                          eql("\e[1m\e[43m\e[31mfoo bar baz\e[0m\e[0m\e[0m")
+      expect(string.bold).to      eql(bold)
+      expect(string.red).to       eql(red)
+      expect(string.on_yellow).to eql(on_yellow)
+
+      expect(string.effect(:bold)).to       eql(bold)
+      expect(string.foreground(:red)).to    eql(red)
+      expect(string.background(:yellow)).to eql(on_yellow)
+      expect(string.fx(:bold)).to           eql(bold)
+      expect(string.fg(:red)).to            eql(red)
+      expect(string.bg(:yellow)).to         eql(on_yellow)
+
+      expect(string.red.on_yellow).to eql(r_on_y)
+      expect(string.fg(:red).bg(:yellow)).to eql(r_on_y)
+
+      expect(string.red.on_yellow.bold).to eql(r_on_y_b)
+      expect(string.fg(:red).bg(:yellow).effect(:bold)).to eql(r_on_y_b)
     end
   end
 end
