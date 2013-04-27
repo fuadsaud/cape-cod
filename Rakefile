@@ -11,3 +11,6 @@ task :console do
     system('pry --require ./lib/cape-cod.rb')
   end
 end
+
+desc 'run all specs'
+task default: :spec
