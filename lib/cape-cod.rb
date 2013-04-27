@@ -48,11 +48,9 @@ module CapeCod
       CapeCod.apply_escape_sequence(code, self)
     end
 
-    define_singleton_method code do |obj = '', &block|
+    define_singleton_method code do |obj = ''|
       string = obj.to_s
-      return CapeCod.escape_sequence_for(code) if string.empty? unless block
-
-      string += block.call if block
+      return CapeCod.escape_sequence_for(code) if string.empty?
 
       CapeCod.apply_escape_sequence(code, string)
     end

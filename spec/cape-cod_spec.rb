@@ -32,19 +32,6 @@ describe CapeCod do
         expect(CapeCod.red(obj)).to eq("\e[31m#{obj.to_s}\e[0m")
       end
     end
-
-    context 'when block given' do
-      it 'prepends the escape sequence and append a reset' do
-        expect(CapeCod.red { 'some text' }).to eq("\e[31msome text\e[0m")
-      end
-    end
-
-    context 'when object and block given' do
-      it 'concatenates them and apply proper sequences' do
-        expect(CapeCod.red('some') { ' text' }).to eq("\e[31msome text\e[0m")
-      end
-    end
-
   end
 
   context 'when using instance methods' do
