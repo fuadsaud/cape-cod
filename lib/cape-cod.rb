@@ -58,9 +58,6 @@ module CapeCod
 
     define_singleton_method "on_#{color}" do |obj = ''|
       string = obj.to_s
-      code = color_code_for(color, :background)
-
-      return escape_sequence_for(code) if string.empty?
 
       background(color, string)
     end
@@ -80,11 +77,8 @@ module CapeCod
     #
     define_singleton_method effect do |obj = ''|
       string = obj.to_s
-      code = effect_code_for(effect)
 
-      return escape_sequence_for(code) if string.empty?
-
-      apply_escape_sequence(code, string)
+      effect(effect, string)
     end
   end
 
