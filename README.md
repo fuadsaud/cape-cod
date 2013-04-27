@@ -1,6 +1,11 @@
 cape-cod
 ========
 
+[![Gem Version](https://badge.fury.io/rb/cape-cod.png)]
+(http://badge.fury.io/rb/cape-cod)
+[![Build Status](https://travis-ci.org/fuadsaud/cape-cod.png?branch=master)]
+(https://travis-ci.org/fuadsaud/cape-cod)
+
 cape-cod makes it easy for you to append ANSI es<strong>CAPE-COD</strong>es - HAR! bet you didn't see
 that coming; I know, I know, I'm a genius - to you strings.
 
