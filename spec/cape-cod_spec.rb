@@ -41,7 +41,7 @@ describe CapeCod do
 
     it 'returns a new string with the proper escape codes applied' do
 
-      expect(string.red).to not_eql(string)
+      expect(string.red).to_not eql(string)
       expect(string.red).to eql("\e[31mfoo bar baz\e[0m")
     end
   end
