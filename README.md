@@ -19,6 +19,20 @@ doesn't suit, so other options should be offered.
 
 Please contribute!
 
+## Installation
+
+Add this line to your applications's gemfile:
+
+```gem 'cape-cod'```
+
+then run:
+
+```bundle```
+
+or simply:
+
+```gem install cape-cod```
+
 ## Contributing
 
 Check the guidelines at [CONTRIBUTING.md](CONTRIBUTING.md).
