@@ -21,8 +21,10 @@ describe CapeCod do
     end
 
     context 'when object param given' do
+      let(:obj) { ['foo', 10, :bar] }
+
       it 'prepends the escape sequence and append a reset' do
-        obj = ['foo', 10, :bar]
+
         expect(CapeCod.red(obj)).to    eq("\e[31m#{obj.to_s}\e[0m")
         expect(CapeCod.on_red(obj)).to eq("\e[41m#{obj.to_s}\e[0m")
         expect(CapeCod.bold(obj)).to   eq("\e[1m#{obj.to_s}\e[0m")
@@ -44,7 +46,6 @@ describe CapeCod do
     it 'returns a new string with the proper escape codes applied' do
 
       expect(string.bold).to_not eql(string)
-
 
       expect(string.bold).to      eql(bold)
       expect(string.red).to       eql(red)
