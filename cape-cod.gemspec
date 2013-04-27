@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-$LOAD_PATH.unshift 'lib'
+$LOAD_PATH.unshift File.expand_path('lib')
 require 'cape-cod/version'
 
 Gem::Specification.new do |s|
@@ -13,13 +13,15 @@ Gem::Specification.new do |s|
   s.authors           = ['Fuad Saud']
   s.has_rdoc          = false
 
-  s.files             = %w( README.md Rakefile LICENSE )
+  s.files             = %w( README.md Rakefile LICENSE.md )
   s.files            += Dir.glob('lib/**/*')
   s.files            += Dir.glob('bin/**/*')
   s.files            += Dir.glob('man/**/*')
   s.files            += Dir.glob('test/**/*')
 
-  s.description       = <<desc
-  Feed me.
-desc
+  s.description       = 'Make your strings look fancy with ANSI escape codes.'
+
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'pry'
+  s.add_development_dependency 'rspec'
 end
