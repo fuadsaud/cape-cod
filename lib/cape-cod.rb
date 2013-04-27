@@ -82,15 +82,15 @@ module CapeCod
     end
   end
 
-  def foreground(color)
+  def foreground(color) # :nodoc:
     CapeCod.foreground(color, self)
   end
 
-  def background(color)
+  def background(color) # :nodoc:
     CapeCod.background(color, self)
   end
 
-  def effect(effect)
+  def effect(effect)    # :nodoc:
     CapeCod.effect(effect, self)
   end
 
@@ -101,15 +101,15 @@ module CapeCod
 
   class << self
 
-    def foreground(color, target)
+    def foreground(color, target) # :nodoc:
       apply_escape_sequence(color_code_for(color, :foreground), target)
     end
 
-    def background(color, target)
+    def background(color, target) # :nodoc:
       apply_escape_sequence(color_code_for(color, :background), target)
     end
 
-    def effect(effect, target)
+    def effect(effect, target) # :nodoc:
       apply_escape_sequence(effect_code_for(effect), target)
     end
 
@@ -120,10 +120,16 @@ module CapeCod
 
     protected
 
+    #
+    # Returns the ANSI escape sequence for the given +color+.
+    #
     def color_code_for(color, ground)
       COLORS.fetch(color) + (ground == :foreground ? 30 : 40)
     end
 
+    #
+    # Returns the ANSI escape sequence for the given +effect+.
+    #
     def effect_code_for(effect)
       EFFECTS.fetch(effect)
     end
@@ -138,15 +144,16 @@ module CapeCod
     end
 
     #
-    # Prepends the given +string+ with the ANSI escape sequence for the given
-    # escape +code+ and append a reset sequence.
+    # Prepends the given +string+ with the ANSI escape sequence for the
+    # given escape +code+. In case string is not empty, also appends a
+    # reset sequence.
     #
     def apply_escape_sequence(code, string)
-      sequence = escape_sequence_for(code)
-
-      return sequence if string.empty? || string.nil?
-
-      sequence << string << escape_sequence_for(effect_code_for(:reset))
+        escape_sequence_for(code).tap do |s|
+        unless string.nil? || string.empty?
+          s << string << escape_sequence_for(effect_code_for(:reset))
+        end
+      end
     end
   end
 end
