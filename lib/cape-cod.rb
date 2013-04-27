@@ -92,6 +92,7 @@ module CapeCod
   end
 
   class << self
+
     def foreground(color, target)
       apply_escape_sequence(color_code_for(color, :foreground), target)
     end
@@ -107,6 +108,7 @@ module CapeCod
     alias_method :color, :foreground
     alias_method :fg,    :foreground
     alias_method :bg,    :background
+    alias_method :fx,    :effect
 
     protected
 
