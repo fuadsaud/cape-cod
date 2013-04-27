@@ -19,8 +19,30 @@ describe CapeCod do
     end
   end
 
-  it %(should prepend the color code and append reset when string
-       is given as param).squeeze(' ') do
-    expect(CapeCod.red('some text')).to eq("\e[31msome text\e[0m")
+  context 'when using singleton method' do
+    context 'no params given' do
+      it 'should return the escape sequence' do
+        expect(CapeCod.red).to eq("\e[31m")
+      end
+    end
+
+    context 'when object param given' do
+      it 'should prepend the escape sequence and append a reset' do
+        obj = ['foo', 10, :bar]
+        expect(CapeCod.red(obj)).to eq("\e[31m#{obj.to_s}\e[0m")
+      end
+    end
+
+    context 'when block given' do
+      it 'should prepend the escape sequence and append a reset' do
+        expect(CapeCod.red { 'some text' }).to eq("\e[31msome text\e[0m")
+      end
+    end
+
+    context 'when object and block given' do
+      it 'should concatenate them and apply proper sequences' do
+        expect(CapeCod.red('some') { ' text' }).to eq("\e[31msome text\e[0m")
+      end
+    end
   end
 end
