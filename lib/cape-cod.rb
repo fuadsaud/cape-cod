@@ -52,9 +52,6 @@ module CapeCod
     #
     define_singleton_method color do |obj = ''|
       string = obj.to_s
-      code = color_code_for(color, :foreground)
-
-      return escape_sequence_for(code) if string.empty?
 
       foreground(color, string)
     end
@@ -90,6 +87,23 @@ module CapeCod
       apply_escape_sequence(code, string)
     end
   end
+
+  def foreground(color)
+    CapeCod.foreground(color, self)
+  end
+
+  def background(color)
+    CapeCod.background(color, self)
+  end
+
+  def effect(effect)
+    CapeCod.effect(effect, self)
+  end
+
+  alias_method :color, :foreground
+  alias_method :fg,    :foreground
+  alias_method :bg,    :background
+  alias_method :fx,    :effect
 
   class << self
 
@@ -136,7 +150,7 @@ module CapeCod
     def apply_escape_sequence(code, string)
       sequence = escape_sequence_for(code)
 
-      return sequence unless string
+      return sequence if string.empty? || string.nil?
 
       sequence << string << escape_sequence_for(effect_code_for(:reset))
     end
