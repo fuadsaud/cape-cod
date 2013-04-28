@@ -19,7 +19,10 @@ Gem::Specification.new do |s|
   s.files            += Dir.glob('man/**/*')
   s.files            += Dir.glob('test/**/*')
 
-  s.description       = 'Make your strings look fancy with ANSI escape codes.'
+  s.description       = <<-DESCRIPTION
+CapeCod offers you simple stupid way of colorizing and applying effects to your
+terminal output, by appending ANSI escape sequences to your strings.
+DESCRIPTION
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'pry'
