@@ -7,6 +7,8 @@ module CapeCod
 
   require 'cape-cod/version'
 
+  @enabled = STDOUT.tty?
+
   EFFECTS = {
     reset:         0,
     bold:          1,
@@ -101,6 +103,8 @@ module CapeCod
 
   class << self
 
+    attr_accessor :enabled
+
     def foreground(color, target) # :nodoc:
       apply_escape_sequence(color_code_for(color, :foreground), target)
     end
@@ -149,6 +153,8 @@ module CapeCod
     # reset sequence.
     #
     def apply_escape_sequence(code, string)
+        return string unless self.enabled
+
         escape_sequence_for(code).tap do |s|
         unless string.nil? || string.empty?
           s << string << escape_sequence_for(effect_code_for(:reset))
