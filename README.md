@@ -35,7 +35,7 @@ Add this line to your applications's gemfile:
 
 then run:
 
-```bundle```
+```bundle install```
 
 or simply:
 
@@ -47,19 +47,17 @@ or simply:
 
 You can include cape-cod in you String class:
 
-```
-class String; include CapeCod end
+    class String; include CapeCod end
 
-puts "Praise R'hlor, for the night is dark and full of terrors".red
+    puts "Praise R'hlor, for the night is dark and full of terrors".red
 
-puts 'This is BOLD'.bold
+    puts 'This is BOLD'.bold
 
-puts 'and this is ITALIC'.fx(:italic) # You should probably avoid italics :\
+    puts 'and this is ITALIC'.fx(:italic) # You should probably avoid *italics* :\
 
-puts 'Black n white'.fg(:black).on_white
+    puts 'Black n white'.fg(:black).on_white
 
-puts 'Magenta background'.bg(:magenta)
-```
+    puts 'Magenta background'.bg(:magenta)
 
 or use it like this:
 
