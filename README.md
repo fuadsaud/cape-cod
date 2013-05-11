@@ -65,10 +65,11 @@ or use it like this:
 
 All the public instance methods are available as module methods.
 
+## License
+
+Please refer to [LICENSE.md](LICENSE.md).
+
 ## Contributing
 
 Check the guidelines at [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## License
-
-Please refer to [LICENSE.md](LICENSE.md).
