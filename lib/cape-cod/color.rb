@@ -3,6 +3,9 @@
 module CapeCod
   class Color
 
+    #
+    # The ANSI color codes.
+    #
     CODES = {
       black:    0,
       red:      1,
@@ -14,6 +17,24 @@ module CapeCod
       white:    7,
     }.freeze
 
+    #
+    # Returns the ANSI domain code for the given RGB color packed
+    # into an Integer.
+    #
+    def self.hex_to_ansi(hex)
+      (6 * ((hex >> 16 & 0xff) / 256.0)).to_i * 36 +
+      (6 * ((hex >>  8 & 0xff) / 256.0)).to_i *  6 +
+      (6 * ((hex       & 0xff) / 256.0)).to_i
+    end
+
+    #
+    # Initializes a the color.
+    #
+    # +color+ may be either a single Integer representation of a RGB
+    # color, a Symbol with the color name (valid color names are listed
+    # in the COLORS hash), or three integers representing the RGB channels.
+    # +ground+ is either :background or :foreground.
+    #
     def initialize(*color, ground)
       unless [:foreground, :background].include? ground
         raise ArgumentError, 'color must be either foreground or background.'
@@ -34,12 +55,17 @@ module CapeCod
       @color  = color.first
     end
 
+    #
+    # Returns a string representing the ANSI escape code for this color.
+    #
     def ansi_code
       case @color
       when Symbol  then code_from_name
       when Integer then code_from_hex
       end
     end
+
+    private
 
     def code_from_name
       CODES[@color].+(@ground == :foreground ? 30 : 40).to_s
@@ -50,12 +76,6 @@ module CapeCod
       color_code  = self.class.hex_to_ansi(@color)
 
       "#{ground_code};5;#{color_code}"
-    end
-
-    def self.hex_to_ansi(hex)
-      (6 * ((hex >> 16 & 0xff) / 256.0)).to_i * 36 +
-      (6 * ((hex >>  8 & 0xff) / 256.0)).to_i *  6 +
-      (6 * ((hex       & 0xff) / 256.0)).to_i
     end
   end
 end
