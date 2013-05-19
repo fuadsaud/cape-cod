@@ -3,11 +3,9 @@
 require 'spec_helper'
 
 describe CapeCod do
-  it 'has a version' do
-    expect(CapeCod::VERSION).to be_a(String)
-  end
+  it('has a version') { expect(CapeCod::VERSION).to be_a String }
 
-  context 'when diasbled' do
+  context 'when disabled' do
     before do
       class String; include CapeCod end
 
@@ -22,7 +20,7 @@ describe CapeCod do
   end
 
   context 'when enabled' do
-    before(:all) { CapeCod.enabled = true }
+    before(:all) do CapeCod.enabled = true end
 
     it 'generates proper escape sequences' do
       expect(CapeCod.reset).to eq("\e[0m")

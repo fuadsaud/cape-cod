@@ -6,6 +6,7 @@ $LOAD_PATH.unshift File.expand_path(
 module CapeCod
 
   require 'cape-cod/version'
+  require 'cape-cod/color'
 
   @enabled = STDOUT.tty?
 
@@ -22,21 +23,10 @@ module CapeCod
     strikethrough: 9
   }.freeze
 
-  COLORS = {
-    black:    0,
-    red:      1,
-    green:    2,
-    yellow:   3,
-    blue:     4,
-    magenta:  5,
-    cyan:     6,
-    white:    7,
-  }.freeze
-
   #
   # Define helper methods for applying the escape codes.
   #
-  COLORS.each do |color, _|
+  Color::CODES.each do |color, _|
 
     #
     # Instance methods for background and foreground colors.
@@ -128,7 +118,7 @@ module CapeCod
     # Returns the ANSI escape sequence for the given +color+.
     #
     def color_code_for(color, ground)
-      COLORS.fetch(color) + (ground == :foreground ? 30 : 40)
+      Color.new(color, ground).ansi_code
     end
 
     #
