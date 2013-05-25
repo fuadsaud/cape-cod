@@ -94,6 +94,7 @@ module CapeCod
   class << self
 
     attr_accessor :enabled
+    alias_method  :enabled?, :enabled
 
     def foreground(color, target) # :nodoc:
       apply_escape_sequence(color_code_for(color, :foreground), target)
