@@ -4,19 +4,33 @@ require 'spec_helper'
 
 describe CapeCod do
   describe CapeCod::Color do
-    context 'when instantiated with valid args' do
-      it 'produces proper color representation' do
-        color_from_symbol = CapeCod::Color.new(:yellow, :foreground).ansi_code
-        color_from_hex = CapeCod::Color.new(0xffff00, :foreground).ansi_code
-        color_from_rgb = CapeCod::Color.new(255, 255, 0, :foreground).ansi_code
+    context 'instantiated with valid args' do
+      context 'passed a three integer RGB representation' do
+        it 'produces proper color representation' do
+          expect(
+            CapeCod::Color.new(255, 255, 0, :foreground).ansi_code
+          ).to eql '38;5;210'
+        end
+      end
 
-        expect(color_from_symbol).to eql '33'
-        expect(color_from_hex).to eql '38;5;210'
-        expect(color_from_rgb).to eql '38;5;210'
+      context 'passed an RGB integer representation' do
+        it 'produces proper color representation' do
+          expect(
+            CapeCod::Color.new(0xffff00, :foreground).ansi_code
+          ).to eql '38;5;210'
+        end
+      end
+
+      context 'passed a color name' do
+        it 'produces proper color representation' do
+          expect(
+            CapeCod::Color.new(:yellow, :foreground).ansi_code
+          ).to eql '33'
+        end
       end
     end
 
-    context 'when instantiated with invalid args' do
+    context 'instantiated with invalid args' do
       it 'fails initialization' do
         expect {
           CapeCod::Color.new(:not_a_color, :foreground).ansi_code

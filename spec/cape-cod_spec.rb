@@ -5,80 +5,147 @@ require 'spec_helper'
 describe CapeCod do
   it('has a version') { expect(CapeCod::VERSION).to be_a String }
 
-  context 'when disabled' do
-    before do
-      class String; include CapeCod end
+  context 'disabled' do
+    before(:all) { CapeCod.enabled = false }
 
-      CapeCod.enabled = false
+    context 'using singleton methods' do
+      it('does nothing') { expect(CapeCod.bold).to be_empty }
     end
 
-    it 'does nothing' do
-      expect(CapeCod.bold).to be_empty
-      expect(CapeCod.red('some text')).to eql('some text')
-      expect('some text'.red.bold.fx(:italic).bg(:cyan)).to eql('some text')
+    context 'using instance methods' do
+      before do
+        class StringWithCapeCodIncluded < String; include CapeCod end
+      end
+
+      let(:target) { StringWithCapeCodIncluded.new('some text') }
+
+      it 'does nothing' do
+        expect(target.red.bold.fx(:italic).bg(:cyan)).to eql(target)
+      end
     end
   end
 
-  context 'when enabled' do
-    before(:all) do CapeCod.enabled = true end
+  context 'enabled' do
+    before(:all) { CapeCod.enabled = true }
 
-    it 'generates proper escape sequences' do
-      expect(CapeCod.reset).to eq("\e[0m")
-    end
+    let(:target) { 'some text' }
 
-    context 'when using singleton methods' do
+    context 'using singleton methods' do
+      let(:bold)   { "\e[1m"  }
+      let(:italic) { "\e[3m"  }
+      let(:red)    { "\e[31m" }
+      let(:on_red) { "\e[41m" }
+      let(:reset)  { "\e[0m"  }
+
+      it('has the "fx" alias') { CapeCod.respond_to? :fx }
+      it('has the "fg" alias') { CapeCod.respond_to? :fg }
+      it('has the "bg" alias') { CapeCod.respond_to? :bg }
+
       context 'no params given' do
-        it 'returns the escape sequence' do
-          expect(CapeCod.red).to    eq("\e[31m")
-          expect(CapeCod.on_red).to eq("\e[41m")
-          expect(CapeCod.bold).to   eq("\e[1m")
+        it 'returns the effect escape sequence' do
+          expect(CapeCod.bold).to eq(bold)
+        end
+
+        it 'returns the foreground color escape sequence' do
+          expect(CapeCod.red).to eq(red)
+        end
+
+        it 'returns the background color escape sequence' do
+          expect(CapeCod.on_red).to eq(on_red)
         end
       end
 
-      context 'when object param given' do
-        let(:obj) { ['foo', 10, :bar] }
+      context 'object param given' do
+        let(:target) { ['foo', 10, :bar] }
 
-        it 'prepends the escape sequence and append a reset' do
+        it 'returns a new object' do
+          expect(CapeCod.bold(target).object_id).to_not eql(target.object_id)
+        end
 
-          expect(CapeCod.red(obj)).to    eq("\e[31m#{obj.to_s}\e[0m")
-          expect(CapeCod.on_red(obj)).to eq("\e[41m#{obj.to_s}\e[0m")
-          expect(CapeCod.bold(obj)).to   eq("\e[1m#{obj.to_s}\e[0m")
+        it "escapes the object with the effect's sequence" do
+          expect(CapeCod.bold(target)).to eq("#{bold}#{target}#{reset}")
+        end
+
+        it "escapes the object with the foreground color's sequence" do
+          expect(CapeCod.red(target)).to eq("#{red}#{target}#{reset}")
+        end
+
+        it "escapes the object with the background color's sequence" do
+          expect(CapeCod.on_red(target)).to eq("#{on_red}#{target}#{reset}")
+        end
+
+        it "works properly with multiple calls passing the same object" do
+          expect(
+            CapeCod.red(CapeCod.italic(CapeCod.bold(CapeCod.on_red(target))))
+          ).to eql(
+            ''.tap do |s|
+              s << "#{red}#{italic}#{bold}#{on_red}"
+              s << "#{target}"
+              s << "#{reset}#{reset}#{reset}#{reset}"
+            end
+          )
         end
       end
     end
 
-    context 'when using instance methods' do
-      before { class String; include CapeCod end }
+    context 'using instance methods' do
+      before(:all) { class String; include CapeCod end }
 
-      let(:string)    { 'foo bar baz' }
-      let(:bold)      { "\e[1m#{string}\e[0m" }
-      let(:red)       { "\e[31m#{string}\e[0m" }
-      let(:on_yellow) { "\e[43m#{string}\e[0m" }
-      let(:r_on_y)    { "\e[43m\e[31mfoo bar baz\e[0m\e[0m" }
-      let(:r_on_y_b)  { "\e[1m\e[43m\e[31mfoo bar baz\e[0m\e[0m\e[0m" }
+      it('has the "fx" alias') { String.public_method_defined? :fx }
+      it('has the "fg" alias') { String.public_method_defined? :fg }
+      it('has the "bg" alias') { String.public_method_defined? :bg }
 
+      context 'using direct methods' do
+        it 'returns a new string' do
+          expect(target.red.object_id).to_not eql(target.object_id)
+        end
 
-      it 'returns a new string with the proper escape codes applied' do
+        it 'behaves the same way as singleton methods for foreground colors' do
+          expect(target.red).to eql(CapeCod.red(target))
+        end
 
-        expect(string.bold).to_not eql(string)
+        it 'behaves the same way as singleton methods for background colors' do
+          expect(target.on_red).to eql(CapeCod.on_red(target))
+        end
 
-        expect(string.bold).to      eql(bold)
-        expect(string.red).to       eql(red)
-        expect(string.on_yellow).to eql(on_yellow)
+        it 'behaves the same way as singleton methods for effects' do
+          expect(target.bold).to eql(CapeCod.bold(target))
+        end
 
-        expect(string.effect(:bold)).to       eql(bold)
-        expect(string.foreground(:red)).to    eql(red)
-        expect(string.background(:yellow)).to eql(on_yellow)
-        expect(string.fx(:bold)).to           eql(bold)
-        expect(string.fg(:red)).to            eql(red)
-        expect(string.bg(:yellow)).to         eql(on_yellow)
+        it 'behaves the same way as singleton methods for chained calls' do
+          expect(
+            target.on_red.bold.italic.red
+          ).to eql(
+            CapeCod.red(CapeCod.italic(CapeCod.bold(CapeCod.on_red(target))))
+          )
+        end
+      end
 
-        expect(string.red.on_yellow).to eql(r_on_y)
-        expect(string.fg(:red).bg(:yellow)).to eql(r_on_y)
+      context 'passing a symbol with color/effect name' do
+        it 'returns a new string' do
+          expect(target.red.object_id).to_not eql(target.object_id)
+        end
 
-        expect(string.red.on_yellow.bold).to eql(r_on_y_b)
-        expect(string.fg(:red).bg(:yellow).effect(:bold)).to eql(r_on_y_b)
+        it 'behaves the same way as singleton methods for foreground colors' do
+          expect(target.foreground(:red)).to eql(CapeCod.red(target))
+        end
+
+        it 'behaves the same way as singleton methods for background colors' do
+          expect(target.background(:red)).to eql(CapeCod.on_red(target))
+        end
+
+        it 'behaves the same way as singleton methods for effects' do
+          expect(target.effect(:bold)).to eql(CapeCod.bold(target))
+        end
+
+        it 'behaves the same way as singleton methods for chained calls' do
+          expect(
+            target.bg(:red).fx(:bold).fx(:italic).fg(:red)
+          ).to eql(
+            CapeCod.red(CapeCod.italic(CapeCod.bold(CapeCod.on_red(target))))
+          )
+        end
+      end
     end
-  end
   end
 end
