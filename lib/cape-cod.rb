@@ -86,7 +86,6 @@ module CapeCod
     CapeCod.effect(effect, self)
   end
 
-  alias_method :color, :foreground
   alias_method :fg,    :foreground
   alias_method :bg,    :background
   alias_method :fx,    :effect
@@ -108,7 +107,6 @@ module CapeCod
       apply_escape_sequence(effect_code_for(effect), target)
     end
 
-    alias_method :color, :foreground
     alias_method :fg,    :foreground
     alias_method :bg,    :background
     alias_method :fx,    :effect
