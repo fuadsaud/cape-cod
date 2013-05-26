@@ -20,7 +20,7 @@ describe CapeCod do
       let(:target) { StringWithCapeCodIncluded.new('some text') }
 
       it 'does nothing' do
-        expect(target.red.bold.fx(:italic).bg(:cyan)).to eql(target)
+        expect(target.red.bold.fx(:italic).bg(:cyan)).to eql target
       end
     end
   end
@@ -37,9 +37,9 @@ describe CapeCod do
       let(:on_red) { "\e[41m" }
       let(:reset)  { "\e[0m"  }
 
-      it('has the "fx" alias') { CapeCod.respond_to? :fx }
-      it('has the "fg" alias') { CapeCod.respond_to? :fg }
-      it('has the "bg" alias') { CapeCod.respond_to? :bg }
+      it { should respond_to :fx }
+      it { should respond_to :fg }
+      it { should respond_to :bg }
 
       context 'no params given' do
         it 'returns the effect escape sequence' do
@@ -91,9 +91,9 @@ describe CapeCod do
     context 'using instance methods' do
       before(:all) { class String; include CapeCod end }
 
-      it('has the "fx" alias') { String.public_method_defined? :fx }
-      it('has the "fg" alias') { String.public_method_defined? :fg }
-      it('has the "bg" alias') { String.public_method_defined? :bg }
+      it('provides the "fx" alias') { String.public_method_defined? :fx }
+      it('provides the "fg" alias') { String.public_method_defined? :fg }
+      it('provides the "bg" alias') { String.public_method_defined? :bg }
 
       context 'using direct methods' do
         it 'returns a new string' do
