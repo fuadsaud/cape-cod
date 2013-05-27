@@ -31,13 +31,13 @@ describe CapeCod do
     let(:target) { 'some text' }
 
     context 'using singleton methods' do
-      let(:bold)        { "\e[1m"  }
-      let(:italic)      { "\e[3m"  }
-      let(:red)         { "\e[31m" }
-      let(:on_red)      { "\e[41m" }
-      let(:rgb_red_fg)  { "\e[38;5;180m"  }
-      let(:rgb_red_bg)  { "\e[48;5;180m"  }
-      let(:reset)       { "\e[0m"  }
+      let(:reset)       { %(\e[0m)  }
+      let(:bold)        { %(\e[1m)  }
+      let(:italic)      { %(\e[3m)  }
+      let(:red)         { %(\e[31m) }
+      let(:on_red)      { %(\e[41m) }
+      let(:rgb_red_fg)  { %(\e[38;5;180m) }
+      let(:rgb_red_bg)  { %(\e[48;5;180m) }
 
       it { should respond_to :fx }
       it { should respond_to :fg }
@@ -124,7 +124,7 @@ describe CapeCod do
           end
         end
 
-        it "works properly with multiple calls passing the same object" do
+        it 'works properly with multiple calls passing the same object' do
           expect(
             CapeCod.red(CapeCod.italic(CapeCod.bold(CapeCod.on_red(target))))
           ).to eql(
