@@ -53,15 +53,21 @@ You can include cape-cod in you String class:
 
     puts 'This is BOLD'.bold
 
-    puts 'and this is ITALIC'.fx(:italic) # You should probably avoid *italics* :\
+    puts 'and this is ITALIC'.fx(:italic) # You're not using this, right?
 
     puts 'Black n white'.fg(:black).on_white
 
     puts 'Magenta background'.bg(:magenta)
 
+    puts 'ZOMG THERE'S RGB AS WELL' background'.bg(220, 112, 234).fg(0xa30fd4)
+
 or use it like this:
 
-```puts CapeCod.yellow('We all live in a yellow submarine!')```
+    puts CapeCod.yellow('We all live in a yellow submarine!')
+
+    puts CapeCod.fx :bold, 'BOOM!'
+
+    puts CapeCod.fg(255, 0, 255, 'Super magenta!')
 
 All the public instance methods are available as module methods.
 
