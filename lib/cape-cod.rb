@@ -142,7 +142,7 @@ module CapeCod
     # reset sequence.
     #
     def apply_escape_sequence(code, target)
-      return target unless self.enabled
+      return target unless self.enabled?
 
       string = target.to_s
 
@@ -152,5 +152,15 @@ module CapeCod
         end
       end
     end
+
+    def ensure_windows_dependencies!
+      if RbConfig::CONFIG['host_os'] =~ /mswin|mingw/
+        require 'Win32/Console/ANSI'
+      end
+    rescue LoadError
+      self.enabled = false
+    end
   end
+
+  ensure_windows_dependencies!
 end
