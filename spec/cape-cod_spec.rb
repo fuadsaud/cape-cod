@@ -139,7 +139,11 @@ describe CapeCod do
     end
 
     context 'using instance methods' do
-      before(:all) { class String; include CapeCod end }
+      before :all do
+        class String
+          include CapeCod
+        end
+      end
 
       it('provides the "fx" alias') { String.public_method_defined? :fx }
       it('provides the "fg" alias') { String.public_method_defined? :fg }

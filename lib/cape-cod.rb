@@ -27,7 +27,6 @@ module CapeCod
   # Define helper methods for applying the escape codes.
   #
   Color::CODES.each do |color, _|
-
     #
     # Instance methods for background and foreground colors.
     #
@@ -56,7 +55,6 @@ module CapeCod
   end
 
   EFFECTS.each do |effect, _|
-
     #
     # Instance methods for effects.
     #

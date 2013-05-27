@@ -36,23 +36,29 @@ module CapeCod
     # +ground+ is either :background or :foreground.
     #
     def initialize(*color, ground)
+      validate_initialization_params(*color, ground)
+
+      if color.size == 3
+        color = [(color[0] << 16) | (color[1] << 8) | color[2]]
+      end
+
+      @ground = ground
+      @color  = color.first
+    end
+
+    def validate_initialization_params(*color, ground)
       unless [:foreground, :background].include? ground
         raise ArgumentError, 'color must be either foreground or background.'
       end
 
       if color.empty? || color.size > 3 || color.size == 2
         raise ArgumentError,
-                      "wrong number of arguments (#{color.size + 1} for 2|4)."
-      elsif color.size == 3
-        color = [(color[0] << 16) | (color[1] << 8) | color[2]]
+          "wrong number of arguments (#{color.size + 1} for 2|4)."
       elsif color.first.is_a?(Integer) && color.first < 0
         raise ArgumentError, 'hex code must be positive.'
       elsif color.first.is_a?(Symbol) && !CODES.has_key?(color.first)
         raise ArgumentError, %(invalid color name "#{color.first}".)
       end
-
-      @ground = ground
-      @color  = color.first
     end
 
     #
