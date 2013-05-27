@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.name                  = 'cape-cod'
   s.version               = CapeCod::VERSION
   s.date                  = Time.now.strftime('%Y-%m-%d')
-  s.summary               = 'Make your strings look fancy with ANSI escape codes.'
+  s.summary               = 'Fancy terminal output with ANSI escape codes.'
   s.homepage              = 'http://github.com/fuadsaud/cape-cod'
   s.email                 = 'fuadksd@gmail.com'
   s.author                = 'Fuad Saud'
