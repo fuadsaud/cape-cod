@@ -137,14 +137,16 @@ module CapeCod
     end
 
     #
-    # Prepends the given +string+ with the ANSI escape sequence for the
+    # Prepends the given +target+ with the ANSI escape sequence for the
     # given escape +code+. In case string is not empty, also appends a
     # reset sequence.
     #
-    def apply_escape_sequence(code, string)
-        return string unless self.enabled
+    def apply_escape_sequence(code, target)
+      return target unless self.enabled
 
-        escape_sequence_for(code).tap do |s|
+      string = target.to_s
+
+      escape_sequence_for(code).tap do |s|
         unless string.nil? || string.empty?
           s << string << escape_sequence_for(effect_code_for(:reset))
         end
