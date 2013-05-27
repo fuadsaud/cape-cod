@@ -31,11 +31,13 @@ describe CapeCod do
     let(:target) { 'some text' }
 
     context 'using singleton methods' do
-      let(:bold)   { "\e[1m"  }
-      let(:italic) { "\e[3m"  }
-      let(:red)    { "\e[31m" }
-      let(:on_red) { "\e[41m" }
-      let(:reset)  { "\e[0m"  }
+      let(:bold)        { "\e[1m"  }
+      let(:italic)      { "\e[3m"  }
+      let(:red)         { "\e[31m" }
+      let(:on_red)      { "\e[41m" }
+      let(:rgb_red_fg)  { "\e[38;5;180m"  }
+      let(:rgb_red_bg)  { "\e[48;5;180m"  }
+      let(:reset)       { "\e[0m"  }
 
       it { should respond_to :fx }
       it { should respond_to :fg }
@@ -62,16 +64,64 @@ describe CapeCod do
           expect(CapeCod.bold(target).object_id).to_not eql(target.object_id)
         end
 
-        it "escapes the object with the effect's sequence" do
-          expect(CapeCod.bold(target)).to eq("#{bold}#{target}#{reset}")
+        context 'using direct method' do
+          it "escapes the object with the effect's sequence" do
+            expect(CapeCod.bold(target)).to eq("#{bold}#{target}#{reset}")
+          end
+
+          it "escapes the object with the foreground color's sequence" do
+            expect(CapeCod.red(target)).to eq("#{red}#{target}#{reset}")
+          end
+
+          it "escapes the object with the background color's sequence" do
+            expect(CapeCod.on_red(target)).to eq("#{on_red}#{target}#{reset}")
+          end
         end
 
-        it "escapes the object with the foreground color's sequence" do
-          expect(CapeCod.red(target)).to eq("#{red}#{target}#{reset}")
-        end
+        context 'passing a symbol with color/effect name' do
+          it "escapes the object with the effect's sequence" do
+            expect(CapeCod.fx(:bold, target)).to eq("#{bold}#{target}#{reset}")
+          end
 
-        it "escapes the object with the background color's sequence" do
-          expect(CapeCod.on_red(target)).to eq("#{on_red}#{target}#{reset}")
+          context 'colorization' do
+            context 'using color names' do
+              it "escapes the object with the foreground color's sequence" do
+                expect(CapeCod.fg(:red, target)).to(
+                  eq("#{red}#{target}#{reset}"))
+              end
+
+              it "escapes the object with the background color's sequence" do
+                expect(CapeCod.bg(:red, target)).to(
+                  eq("#{on_red}#{target}#{reset}"))
+              end
+            end
+
+            context 'using RGB' do
+              context 'passing three integers' do
+                it "escapes the object with the foreground color's sequence" do
+                  expect(CapeCod.fg(255, 0, 0, target)).to(
+                    eq("#{rgb_red_fg}#{target}#{reset}"))
+                end
+
+                it "escapes the object with the background color's sequence" do
+                  expect(CapeCod.bg(255, 0, 0, target)).to(
+                    eq("#{rgb_red_bg}#{target}#{reset}"))
+                end
+              end
+
+              context 'passing a single integer (hex representation)' do
+                it "escapes the object with the foreground color's sequence" do
+                  expect(CapeCod.fg(0xff0000, target)).to(
+                    eq("#{rgb_red_fg}#{target}#{reset}"))
+                end
+
+                it "escapes the object with the background color's sequence" do
+                  expect(CapeCod.bg(0xff0000, target)).to(
+                    eq("#{rgb_red_bg}#{target}#{reset}"))
+                end
+              end
+            end
+          end
         end
 
         it "works properly with multiple calls passing the same object" do

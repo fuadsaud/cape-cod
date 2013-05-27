@@ -74,12 +74,12 @@ module CapeCod
     end
   end
 
-  def foreground(color) # :nodoc:
-    CapeCod.foreground(color, self)
+  def foreground(*color) # :nodoc:
+    CapeCod.foreground(*color, self)
   end
 
-  def background(color) # :nodoc:
-    CapeCod.background(color, self)
+  def background(*color) # :nodoc:
+    CapeCod.background(*color, self)
   end
 
   def effect(effect)    # :nodoc:
@@ -95,12 +95,12 @@ module CapeCod
     attr_accessor :enabled
     alias_method  :enabled?, :enabled
 
-    def foreground(color, target) # :nodoc:
-      apply_escape_sequence(color_code_for(color, :foreground), target)
+    def foreground(*color, target) # :nodoc:
+      apply_escape_sequence(color_code_for(*color, :foreground), target)
     end
 
-    def background(color, target) # :nodoc:
-      apply_escape_sequence(color_code_for(color, :background), target)
+    def background(*color, target) # :nodoc:
+      apply_escape_sequence(color_code_for(*color, :background), target)
     end
 
     def effect(effect, target) # :nodoc:
@@ -116,8 +116,8 @@ module CapeCod
     #
     # Returns the ANSI escape sequence for the given +color+.
     #
-    def color_code_for(color, ground)
-      Color.new(color, ground).ansi_code
+    def color_code_for(*color, ground)
+      Color.new(*color, ground).ansi_code
     end
 
     #
