@@ -18,16 +18,6 @@ module CapeCod
     }.freeze
 
     #
-    # Returns the ANSI domain code for the given RGB color packed
-    # into an Integer.
-    #
-    def self.hex_to_ansi(hex)
-      (6 * ((hex >> 16 & 0xff) / 256.0)).to_i * 36 +
-      (6 * ((hex >>  8 & 0xff) / 256.0)).to_i *  6 +
-      (6 * ((hex       & 0xff) / 256.0)).to_i
-    end
-
-    #
     # Initializes a the color.
     #
     # +color+ may be either a single Integer representation of a RGB
@@ -44,21 +34,6 @@ module CapeCod
 
       @ground = ground
       @color  = color.first
-    end
-
-    def validate_initialization_params(*color, ground)
-      unless [:foreground, :background].include? ground
-        raise ArgumentError, 'color must be either foreground or background.'
-      end
-
-      if color.empty? || color.size > 3 || color.size == 2
-        raise ArgumentError,
-          "wrong number of arguments (#{color.size + 1} for 2|4)."
-      elsif color.first.is_a?(Integer) && color.first < 0
-        raise ArgumentError, 'hex code must be positive.'
-      elsif color.first.is_a?(Symbol) && !CODES.has_key?(color.first)
-        raise ArgumentError, %(invalid color name "#{color.first}".)
-      end
     end
 
     #
@@ -83,5 +58,35 @@ module CapeCod
 
       "#{ground_code};5;#{color_code}"
     end
+
+    #
+    # Returns the ANSI domain code for the given RGB color packed
+    # into an Integer.
+    #
+    def self.hex_to_ansi(hex)
+      ((6 * ((hex >> 16 & 0xff).quo(256))) * 36 +
+       (6 * ((hex >>  8 & 0xff).quo(256))) *  6 +
+       (6 * ((hex       & 0xff).quo(256)))).to_i
+    end
+
+    def validate_initialization_params(*color, ground)
+      validate_ground(ground)
+
+      if color.empty? || color.size > 3 || color.size == 2
+        raise ArgumentError,
+              "wrong number of arguments (#{color.size + 1} for 2|4)."
+      elsif color.first.is_a?(Integer) && color.first < 0
+        raise ArgumentError, 'hex code must be positive.'
+      elsif color.first.is_a?(Symbol) && !CODES.has_key?(color.first)
+        raise ArgumentError, %(invalid color name "#{color.first}".)
+      end
+    end
+
+    def validate_ground(ground)
+      unless [:foreground, :background].include? ground
+        raise ArgumentError, 'ground must be either foreground or background.'
+      end
+    end
+
   end
 end
