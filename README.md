@@ -79,3 +79,7 @@ Please refer to [LICENSE.md](LICENSE.md).
 
 Check the guidelines at [CONTRIBUTING.md](CONTRIBUTING.md).
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/fuadsaud/cape-cod/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
