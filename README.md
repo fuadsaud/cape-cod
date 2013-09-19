@@ -7,8 +7,7 @@ cape-cod
 (https://travis-ci.org/fuadsaud/cape-cod)
 
 cape-cod makes it easy for you to append ANSI es<strong>cape-cod</strong>es -
-HAR! bet you didn't see that coming; I know, I know, I'm a genius - to your
-strings.
+HAR! bet you didn't see that coming - to your strings.
 
 ### *Hey, but don't we have a plenty of gems that do exactly the same thing?*
 
