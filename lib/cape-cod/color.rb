@@ -64,9 +64,9 @@ module CapeCod
     # into an Integer.
     #
     def self.hex_to_ansi(hex)
-      ((6 * ((hex >> 16 & 0xff).quo(256))) * 36 +
-       (6 * ((hex >>  8 & 0xff).quo(256))) *  6 +
-       (6 * ((hex       & 0xff).quo(256)))).to_i
+      (6 * ((hex >> 16 & 0xff).quo(256))).to_i * 36 +
+      (6 * ((hex >>  8 & 0xff).quo(256))).to_i *  6 +
+      (6 * ((hex       & 0xff).quo(256))).to_i
     end
 
     def validate_initialization_params(*color, ground)
