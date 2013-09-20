@@ -26,14 +26,14 @@ module CapeCod
     # +ground+ is either :background or :foreground.
     #
     def initialize(*color, ground)
-      validate_initialization_params(*color, ground)
+      with_valid_color_and_ground *color, ground do |*c, g|
+        if c.size == 3
+          c = [(c[0] << 16) | (c[1] << 8) | c[2]]
+        end
 
-      if color.size == 3
-        color = [(color[0] << 16) | (color[1] << 8) | color[2]]
+        @ground = ground
+        @color  = c.first
       end
-
-      @ground = ground
-      @color  = color.first
     end
 
     #
@@ -69,24 +69,30 @@ module CapeCod
       (6 * ((hex       & 0xff).quo(256))).to_i
     end
 
-    def validate_initialization_params(*color, ground)
-      validate_ground(ground)
+    def with_valid_color_and_ground(*color, ground)
+      validate_color!(*color) and
+        validate_ground!(ground) and yield *color, ground
+    end
 
+    def validate_color!(*color)
       if color.empty? || color.size > 3 || color.size == 2
-        raise ArgumentError,
+        fail ArgumentError,
               "wrong number of arguments (#{color.size + 1} for 2|4)."
       elsif color.first.is_a?(Integer) && color.first < 0
-        raise ArgumentError, 'hex code must be positive.'
+        fail ArgumentError, 'hex code must be positive.'
       elsif color.first.is_a?(Symbol) && !CODES.has_key?(color.first)
-        raise ArgumentError, %(invalid color name "#{color.first}".)
+        fail ArgumentError, %(invalid color name "#{color.first}".)
+      else
+        color
       end
     end
 
-    def validate_ground(ground)
-      unless [:foreground, :background].include? ground
-        raise ArgumentError, 'ground must be either foreground or background.'
+    def validate_ground!(ground)
+      if [:foreground, :background].include? ground
+        ground
+      else
+        fail ArgumentError, 'ground must be either foreground or background.'
       end
     end
-
   end
 end
