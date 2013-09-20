@@ -2,9 +2,11 @@ cape-cod
 ========
 
 [![Gem Version](https://badge.fury.io/rb/cape-cod.png)]
-(http://badge.fury.io/rb/cape-cod)
+               (http://badge.fury.io/rb/cape-cod)
 [![Build Status](https://travis-ci.org/fuadsaud/cape-cod.png?branch=master)]
-(https://travis-ci.org/fuadsaud/cape-cod)
+                (https://travis-ci.org/fuadsaud/cape-cod)
+[![Code Climate](https://codeclimate.com/github/fuadsaud/cape-cod.png)]
+                (https://codeclimate.com/github/fuadsaud/cape-cod)
 
 cape-cod makes it easy for you to append ANSI es<strong>cape-cod</strong>es -
 HAR! bet you didn't see that coming - to your strings.
