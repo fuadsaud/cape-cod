@@ -1,14 +1,6 @@
 # encoding: utf-8
 
-$LOAD_PATH.unshift File.expand_path(
-  File.join(File.dirname(__FILE__), '../lib'))
-
 module CapeCod
-  require 'cape-cod/version'
-  require 'cape-cod/color'
-
-  @enabled = STDOUT.tty?
-
   EFFECTS = {
     reset:         0,
     bold:          1,
@@ -22,10 +14,16 @@ module CapeCod
     strikethrough: 9
   }.freeze
 
+  require_relative 'cape-cod/version'
+  require_relative 'cape-cod/color'
+
   #
   # Define helper methods for applying the escape codes.
   #
   class << self
+    attr_accessor :enabled
+    alias_method  :enabled?, :enabled
+
     Color::CODES.keys.each do |color|
       define_method color do |target = ''|
         CapeCod.foreground(color, target)
@@ -41,9 +39,6 @@ module CapeCod
         CapeCod.effect(effect, target)
       end
     end
-
-    attr_accessor :enabled
-    alias_method  :enabled?, :enabled
 
     def foreground(*color, target) # :nodoc:
       apply_escape_sequence(color_code_for(*color, :foreground), target)
@@ -101,14 +96,19 @@ module CapeCod
       end
     end
 
-    def ensure_windows_dependencies!
+    def ensure_windows_dependencies
       if RbConfig::CONFIG['host_os'] =~ /mswin|mingw/
         require 'Win32/Console/ANSI'
       end
     rescue LoadError
       self.enabled = false
     end
+
+    def ensure_environment_conditions
+      self.enabled = ENV['TERM'] != 'dumb' && (STDOUT.tty? && STDERR.tty?)
+    end
   end
 
-  ensure_windows_dependencies!
+  ensure_windows_dependencies
+  ensure_environment_conditions
 end

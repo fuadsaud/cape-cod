@@ -5,6 +5,31 @@ require 'spec_helper'
 describe CapeCod do
   it('has a version') { expect(CapeCod::VERSION).to be_a String }
 
+  describe 'environment defaults' do
+    context 'standard streams are tty' do
+      it 'is disabled' do
+        expect(STDOUT).to receive(:tty?).and_return(true)
+        expect(STDERR).to receive(:tty?).and_return(true)
+
+        CapeCod.send(:ensure_environment_conditions)
+
+        expect(CapeCod).to be_enabled
+      end
+    end
+
+    context 'standard streams are tty' do
+      it 'is enabled' do
+        expect(STDOUT).to receive(:tty?).and_return(true)
+        expect(STDERR).to receive(:tty?).and_return(false)
+
+        CapeCod.send(:ensure_environment_conditions)
+
+        expect(CapeCod).to_not be_enabled
+      end
+    end
+  end
+
+
   context 'disabled' do
     before(:all) { CapeCod.enabled = false }
 
