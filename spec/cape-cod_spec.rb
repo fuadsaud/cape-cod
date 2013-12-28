@@ -14,7 +14,11 @@ describe CapeCod do
 
     context 'using instance methods' do
       before do
-        class StringWithCapeCodIncluded < String; include CapeCod end
+        require 'cape-cod/string'
+
+        StringWithCapeCodIncluded = Class.new(String).tap { |klass|
+          klass.send(:include, CapeCod::String)
+        }
       end
 
       let(:target) { StringWithCapeCodIncluded.new('some text') }
@@ -141,7 +145,7 @@ describe CapeCod do
     context 'using instance methods' do
       before :all do
         class String
-          include CapeCod
+          include CapeCod::String
         end
       end
 

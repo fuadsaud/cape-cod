@@ -48,9 +48,13 @@ or simply:
 
 You can include cape-cod in you String class:
 
-    class String; include CapeCod end
+    require 'cape-cod/string'
 
-    puts "Praise R'hlor, for the night is dark and full of terrors".red
+    class String
+      include CapeCod::String
+    end
+
+    puts "OHAI".red
 
     puts 'This is BOLD'.bold
 
@@ -80,7 +84,4 @@ Please refer to [LICENSE.md](LICENSE.md).
 
 Check the guidelines at [CONTRIBUTING.md](CONTRIBUTING.md).
 
-
-
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/fuadsaud/cape-cod/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-

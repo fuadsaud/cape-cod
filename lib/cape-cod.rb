@@ -4,7 +4,6 @@ $LOAD_PATH.unshift File.expand_path(
   File.join(File.dirname(__FILE__), '../lib'))
 
 module CapeCod
-
   require 'cape-cod/version'
   require 'cape-cod/color'
 
@@ -26,69 +25,22 @@ module CapeCod
   #
   # Define helper methods for applying the escape codes.
   #
-  Color::CODES.each do |color, _|
-    #
-    # Instance methods for background and foreground colors.
-    #
-    define_method color do
-      CapeCod.foreground(color, self)
-    end
-
-    define_method "on_#{color}".to_s do
-      CapeCod.background(color, self)
-    end
-
-    #
-    # Singleton methods for background and foreground colors.
-    #
-    define_singleton_method color do |obj = ''|
-      string = obj.to_s
-
-      foreground(color, string)
-    end
-
-    define_singleton_method "on_#{color}" do |obj = ''|
-      string = obj.to_s
-
-      background(color, string)
-    end
-  end
-
-  EFFECTS.each do |effect, _|
-    #
-    # Instance methods for effects.
-    #
-    define_method effect do
-      CapeCod.effect(effect, self)
-    end
-
-    #
-    # Singleton methods for effects.
-    #
-    define_singleton_method effect do |obj = ''|
-      string = obj.to_s
-
-      effect(effect, string)
-    end
-  end
-
-  def foreground(*color) # :nodoc:
-    CapeCod.foreground(*color, self)
-  end
-
-  def background(*color) # :nodoc:
-    CapeCod.background(*color, self)
-  end
-
-  def effect(effect)    # :nodoc:
-    CapeCod.effect(effect, self)
-  end
-
-  alias_method :fg, :foreground
-  alias_method :bg, :background
-  alias_method :fx, :effect
-
   class << self
+    Color::CODES.keys.each do |color|
+      define_method color do |target = ''|
+        CapeCod.foreground(color, target)
+      end
+
+      define_method "on_#{color}".to_s do |target = ''|
+        CapeCod.background(color, target)
+      end
+    end
+
+    EFFECTS.keys.each do |effect|
+      define_method effect do |target = ''|
+        CapeCod.effect(effect, target)
+      end
+    end
 
     attr_accessor :enabled
     alias_method  :enabled?, :enabled
@@ -109,7 +61,7 @@ module CapeCod
     alias_method :bg, :background
     alias_method :fx, :effect
 
-    protected
+    private
 
     #
     # Returns the ANSI escape sequence for the given +color+.
@@ -124,8 +76,6 @@ module CapeCod
     def effect_code_for(effect)
       EFFECTS.fetch(effect)
     end
-
-    private
 
     #
     # Returns the ANSI escape sequence for a given escape +code+.
