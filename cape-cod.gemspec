@@ -23,4 +23,9 @@ Gem::Specification.new do |s|
 CapeCod offers you simple stupid way of colorizing and applying effects to your
 terminal output, by appending ANSI escape sequences to your strings.
 DESCRIPTION
+
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'guard-rspec'
+  s.add_development_dependency 'rubocop'
 end
