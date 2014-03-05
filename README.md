@@ -44,7 +44,7 @@ or simply:
 
 ## Usage
 
-```require 'cap-cod'```
+```require 'cape-cod'```
 
 You can include cape-cod in you String class:
 
